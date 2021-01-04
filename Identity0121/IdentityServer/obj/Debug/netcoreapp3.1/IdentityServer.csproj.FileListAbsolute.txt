@@ -70,3 +70,5 @@ D:\formation\dotnet\identityserver\Identity0121\Identity0121\IdentityServer\bin\
 D:\formation\dotnet\identityserver\Identity0121\Identity0121\IdentityServer\bin\Debug\netcoreapp3.1\runtimes\unix\lib\netcoreapp2.1\System.Security.Principal.Windows.dll
 D:\formation\dotnet\identityserver\Identity0121\Identity0121\IdentityServer\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.1\System.Security.Principal.Windows.dll
 D:\formation\dotnet\identityserver\Identity0121\Identity0121\IdentityServer\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp3.0\System.Windows.Extensions.dll
+D:\formation\dotnet\identityserver\Identity0121\Identity0121\IdentityServer\obj\Debug\netcoreapp3.1\IdentityServer.csproj.CoreCompileInputs.cache
+D:\formation\dotnet\identityserver\Identity0121\Identity0121\IdentityServer\obj\Debug\netcoreapp3.1\IdentityServer.MvcApplicationPartsAssemblyInfo.cache

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using IdentityServer.Demo;
 using IdentityServer.Services;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Builder;
@@ -34,8 +35,12 @@ namespace IdentityServer
             {
                 options.UserInteraction.LoginUrl = "/login";
                 options.UserInteraction.LogoutUrl = "/logout";
-            });
+          
+            })
+                .AddInMemoryApiScopes(DemoClientCredentials.ApiScopes)
+                .AddInMemoryClients(DemoClientCredentials.Clients);
 
+            builder.AddDeveloperSigningCredential();//only dev
 
             //.AddTestUsers(new List<IdentityServer4.Test.TestUser> { new IdentityServer4.Test.TestUser {  } });
         }
@@ -60,7 +65,7 @@ namespace IdentityServer
 
             app.UseRouting();
 
-            app.UseAuthorization();
+            //app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
