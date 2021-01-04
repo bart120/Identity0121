@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using IdentityServer.Services;
+using IdentityServer4.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -24,6 +26,18 @@ namespace IdentityServer
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
+            //validation user AD
+            //services.AddScoped<IProfileService, ADProfileService>();
+
+            var builder = services.AddIdentityServer(options =>
+            {
+                options.UserInteraction.LoginUrl = "/login";
+                options.UserInteraction.LogoutUrl = "/logout";
+            });
+
+
+            //.AddTestUsers(new List<IdentityServer4.Test.TestUser> { new IdentityServer4.Test.TestUser {  } });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

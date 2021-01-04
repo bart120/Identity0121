@@ -49,6 +49,14 @@
             "Microsoft.VisualStudio.Azure.Containers.Tools.Targets": {
               "target": "Package",
               "version": "[1.10.9, )"
+            },
+            "System.DirectoryServices": {
+              "target": "Package",
+              "version": "[5.0.0, )"
+            },
+            "System.DirectoryServices.AccountManagement": {
+              "target": "Package",
+              "version": "[5.0.0, )"
             }
           },
           "imports": [
