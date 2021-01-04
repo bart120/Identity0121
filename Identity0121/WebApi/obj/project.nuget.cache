@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "HWoDzNuoPif7MRdMzg/vWZk4j6Zg/xVxy4I7Yzed13wyW4rGlmpCRJ5dSk9PG11pHLc0vMqHyg2R9NbjcE0i6A==",
+  "success": true,
+  "projectFilePath": "D:\\formation\\dotnet\\identityserver\\Identity0121\\Identity0121\\WebApi\\WebApi.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\vlecl\\.nuget\\packages\\microsoft.visualstudio.azure.containers.tools.targets\\1.10.9\\microsoft.visualstudio.azure.containers.tools.targets.1.10.9.nupkg.sha512",
+    "C:\\Users\\vlecl\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\3.1.2\\microsoft.aspnetcore.app.ref.3.1.2.nupkg.sha512"
+  ],
+  "logs": []
+}
