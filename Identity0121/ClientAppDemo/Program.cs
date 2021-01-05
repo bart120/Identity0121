@@ -18,7 +18,7 @@ namespace ClientAppDemo
                 Address = disco.TokenEndpoint,
                 ClientId = "console_devis_forge",
                 ClientSecret = "key_devis_forge",
-                Scope = "api_li"
+                Scope = "api_li_scope"
             });
 
             if (tokenResponse.IsError)

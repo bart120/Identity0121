@@ -2,21 +2,25 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using IdentityServer.AspIdentity;
 using IdentityServer4;
 using IdentityServer4.EntityFramework.DbContexts;
 using IdentityServer4.EntityFramework.Mappers;
 using IdentityServer4.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IdentityServer.Controllers
 {
-    public class ManegeApiController : Controller
+    public class ManageApiController : Controller
     {
         private readonly ConfigurationDbContext _confContext;
+        private readonly UserManager<User> _userMgr;
 
-        public ManegeApiController(ConfigurationDbContext confContext)
+        public ManageApiController(ConfigurationDbContext confContext, UserManager<User> userMgr)
         {
             _confContext = confContext;
+            _userMgr = userMgr;
         }
 
         public async Task<IActionResult> AddApiResource()
@@ -72,7 +76,7 @@ namespace IdentityServer.Controllers
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
-                        "api_li"
+                        "api_li_scope"
                     },
                 RedirectUris = { "https://oauth.pstmn.io/v1/callback", "https://localhost:44396/signin-oidc" },
                 RequirePkce = false
@@ -84,6 +88,22 @@ namespace IdentityServer.Controllers
             await _confContext.SaveChangesAsync();
 
             return Ok();
+        }
+
+        public async Task<IActionResult> AddUser()
+        {
+            var u = new User();
+            u.UserName = "remi@google.fr";
+            u.Firstname = "Rémi";
+            u.Lastname = "Berthe";
+            u.Email = "remi@google.fr";
+            u.EmailConfirmed = true;
+            
+            var result = _userMgr.CreateAsync(u, "Toto2021$").Result;
+            if (!result.Succeeded)
+                return BadRequest(result.Errors);
+            else
+                return Ok();
         }
 
     }

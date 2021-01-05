@@ -30,7 +30,7 @@ namespace MVCClient
             services.AddAuthentication(options =>
             {
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = "oidc";
             })
             .AddCookie(options => options.ExpireTimeSpan = TimeSpan.FromMinutes(60)) 
             .AddOpenIdConnect(options =>
@@ -45,7 +45,9 @@ namespace MVCClient
 
                 options.Scope.Add("openid");
                 options.Scope.Add("profile");
+                options.GetClaimsFromUserInfoEndpoint = true;
 
+                options.SaveTokens = true;
             });
 
         }

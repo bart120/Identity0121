@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -20,8 +21,12 @@ namespace MVCClient.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            var u = User;
+            var accessToken = await HttpContext.GetTokenAsync("access_token");
+            var idToken = await HttpContext.GetTokenAsync("id_token");
+
             return View();
         }
 

@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.DirectoryServices.AccountManagement;
 using System.Linq;
 using System.Threading.Tasks;
+using IdentityServer.AspIdentity;
 using IdentityServer.Demo;
 using IdentityServer.Models;
 using IdentityServer4;
 using IdentityServer4.Test;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IdentityServer.Controllers
@@ -14,11 +17,15 @@ namespace IdentityServer.Controllers
     public class AuthenticationController : Controller
     {
 
-        private readonly TestUserStore _users;
+        //private readonly TestUserStore _users;
+        private readonly UserManager<User> _userMgr;
+        private readonly SignInManager<User> _signInMgr;
 
-        public AuthenticationController(TestUserStore users = null)
+        public AuthenticationController(/*TestUserStore users = null*/UserManager<User> userMgr, SignInManager<User> signInMgr)
         {
-            _users = users ?? new TestUserStore(TestUsers.Users);
+            //_users = users ?? new TestUserStore(TestUsers.Users);
+            _signInMgr = signInMgr;
+            _userMgr = userMgr;
         }
 
         [Route("login", Name = "UrlLogin")]
@@ -36,7 +43,14 @@ namespace IdentityServer.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (_users.ValidateCredentials(model.Email, model.Password)) 
+                var result = await _signInMgr.PasswordSignInAsync(model.Email, model.Password, false, lockoutOnFailure: true);
+                if (result.Succeeded)
+                {
+                    //var user = await _userMgr.FindByNameAsync(model.Email);
+                    return Redirect(model.ReturnUrl);
+                }
+                
+                /*if (_users.ValidateCredentials(model.Email, model.Password)) 
                 {
                     var user = _users.FindByUsername(model.Email);
 
@@ -48,10 +62,19 @@ namespace IdentityServer.Controllers
                     await HttpContext.SignInAsync(isuser);
 
                     return Redirect(model.ReturnUrl);
-                }
+                }*/
+
+
             }
             ModelState.AddModelError("Email", "Login / mot de passe invalide");
             return View();
+
+            //with AD
+            var adContext = new PrincipalContext(ContextType.Domain);
+            if(adContext.ValidateCredentials(model.Email, model.Password))
+            {
+
+            }
         }
     }
 }

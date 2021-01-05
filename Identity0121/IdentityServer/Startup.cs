@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using IdentityServer.AspIdentity;
 using IdentityServer.Demo;
 using IdentityServer.Services;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -33,6 +36,27 @@ namespace IdentityServer
 
             services.AddControllersWithViews();
 
+            services.AddDbContext<AuthenticationDbContext>(options =>
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection"));
+            });
+
+            services.AddIdentity<User, IdentityRole>(options =>
+            {
+                options.Password.RequiredLength = 8;
+                options.Password.RequireDigit = true;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireUppercase = true;
+                options.Password.RequireNonAlphanumeric = true;
+                options.Lockout.MaxFailedAccessAttempts = 3;
+                options.User.RequireUniqueEmail = true;
+            })
+                .AddEntityFrameworkStores<AuthenticationDbContext>()
+                .AddUserManager<UserManager<User>>();
+
+
+
+
             //validation user AD
             //services.AddScoped<IProfileService, ADProfileService>();
 
@@ -48,7 +72,7 @@ namespace IdentityServer
                 /*.AddInMemoryIdentityResources(DemoCode.IdentityResources)
                 .AddInMemoryApiScopes(DemoCode.ApiScopes)
                 .AddInMemoryClients(DemoCode.Clients)*/
-                .AddTestUsers(TestUsers.Users)
+                //.AddTestUsers(TestUsers.Users)
                 .AddConfigurationStore(s =>
                 {
                     s.DefaultSchema = "configuration";
@@ -62,9 +86,20 @@ namespace IdentityServer
                          sql => sql.MigrationsAssembly(migrationAssemblyName));
                 });
 
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/login";
+                options.LogoutPath = "/logout";
+
+            });
+
+            builder.AddAspNetIdentity<User>();
+
             builder.AddDeveloperSigningCredential();//only dev
 
             services.AddAuthentication();
+
+            
 
             //.AddTestUsers(new List<IdentityServer4.Test.TestUser> { new IdentityServer4.Test.TestUser {  } });
         }
