@@ -37,10 +37,16 @@ namespace IdentityServer
                 options.UserInteraction.LogoutUrl = "/logout";
           
             })
-                .AddInMemoryApiScopes(DemoClientCredentials.ApiScopes)
-                .AddInMemoryClients(DemoClientCredentials.Clients);
+                /*.AddInMemoryApiScopes(DemoClientCredentials.ApiScopes)
+                .AddInMemoryClients(DemoClientCredentials.Clients);*/
+                .AddInMemoryIdentityResources(DemoCode.IdentityResources)
+                .AddInMemoryApiScopes(DemoCode.ApiScopes)
+                .AddInMemoryClients(DemoCode.Clients)
+                .AddTestUsers(TestUsers.Users);
 
             builder.AddDeveloperSigningCredential();//only dev
+
+            services.AddAuthentication();
 
             //.AddTestUsers(new List<IdentityServer4.Test.TestUser> { new IdentityServer4.Test.TestUser {  } });
         }
@@ -61,11 +67,11 @@ namespace IdentityServer
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
-            app.UseIdentityServer();
-
             app.UseRouting();
 
-            //app.UseAuthorization();
+            app.UseIdentityServer();
+
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

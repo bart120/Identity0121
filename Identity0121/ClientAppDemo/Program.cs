@@ -16,7 +16,7 @@ namespace ClientAppDemo
             var tokenResponse = await client.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
             {
                 Address = disco.TokenEndpoint,
-                ClientId = "devis_forge",
+                ClientId = "console_devis_forge",
                 ClientSecret = "key_devis_forge",
                 Scope = "api_li"
             });

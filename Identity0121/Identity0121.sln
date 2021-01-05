@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30128.74
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityServer", "IdentityServer\IdentityServer.csproj", "{B456B805-9A5E-4099-B511-FE42488DB301}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityServer", "IdentityServer\IdentityServer.csproj", "{B456B805-9A5E-4099-B511-FE42488DB301}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi", "WebApi\WebApi.csproj", "{E3260BB0-923D-4C14-BC73-AB0984CF3192}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi", "WebApi\WebApi.csproj", "{E3260BB0-923D-4C14-BC73-AB0984CF3192}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientAppDemo", "ClientAppDemo\ClientAppDemo.csproj", "{5480CD02-CF08-486C-AB14-1E663D31794A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientAppDemo", "ClientAppDemo\ClientAppDemo.csproj", "{5480CD02-CF08-486C-AB14-1E663D31794A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MVCClient", "MVCClient\MVCClient.csproj", "{3FD97512-89BE-4F83-97F6-22A344C919D0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{5480CD02-CF08-486C-AB14-1E663D31794A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5480CD02-CF08-486C-AB14-1E663D31794A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5480CD02-CF08-486C-AB14-1E663D31794A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3FD97512-89BE-4F83-97F6-22A344C919D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FD97512-89BE-4F83-97F6-22A344C919D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FD97512-89BE-4F83-97F6-22A344C919D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FD97512-89BE-4F83-97F6-22A344C919D0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
