@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using IdentityServer.Demo;
 using IdentityServer.Services;
@@ -8,6 +9,7 @@ using IdentityServer4.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -26,6 +28,9 @@ namespace IdentityServer
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var migrationAssemblyName = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
+
+
             services.AddControllersWithViews();
 
             //validation user AD
@@ -35,14 +40,27 @@ namespace IdentityServer
             {
                 options.UserInteraction.LoginUrl = "/login";
                 options.UserInteraction.LogoutUrl = "/logout";
-          
+
             })
+
                 /*.AddInMemoryApiScopes(DemoClientCredentials.ApiScopes)
                 .AddInMemoryClients(DemoClientCredentials.Clients);*/
-                .AddInMemoryIdentityResources(DemoCode.IdentityResources)
+                /*.AddInMemoryIdentityResources(DemoCode.IdentityResources)
                 .AddInMemoryApiScopes(DemoCode.ApiScopes)
-                .AddInMemoryClients(DemoCode.Clients)
-                .AddTestUsers(TestUsers.Users);
+                .AddInMemoryClients(DemoCode.Clients)*/
+                .AddTestUsers(TestUsers.Users)
+                .AddConfigurationStore(s =>
+                {
+                    s.DefaultSchema = "configuration";
+                    s.ConfigureDbContext = db => db.UseSqlServer(Configuration.GetConnectionString("IdentityConnection"),
+                        sql => sql.MigrationsAssembly(migrationAssemblyName));
+                })
+                .AddOperationalStore(s =>
+                {
+                    s.DefaultSchema = "operational";
+                    s.ConfigureDbContext = db => db.UseSqlServer(Configuration.GetConnectionString("IdentityConnection"),
+                         sql => sql.MigrationsAssembly(migrationAssemblyName));
+                });
 
             builder.AddDeveloperSigningCredential();//only dev
 

@@ -47,7 +47,7 @@ namespace WebApi
             {
                 options.AddPolicy("scope", policy =>
                 {
-                    policy.RequireClaim("scope", "api_li");
+                    policy.RequireClaim("scope", "api_li_scope");
                 });
             });
         }
