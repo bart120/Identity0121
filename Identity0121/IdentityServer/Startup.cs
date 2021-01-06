@@ -52,6 +52,7 @@ namespace IdentityServer
                 options.Lockout.MaxFailedAccessAttempts = 3;
                 options.User.RequireUniqueEmail = true;
             })
+                .AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<AuthenticationDbContext>()
                 .AddUserManager<UserManager<User>>();
 
@@ -85,9 +86,9 @@ namespace IdentityServer
                     s.DefaultSchema = "operational";
                     s.ConfigureDbContext = db => db.UseSqlServer(Configuration.GetConnectionString("IdentityConnection"),
                          sql => sql.MigrationsAssembly(migrationAssemblyName));
-                })
+                });
                 //.AddProfileService<CustomClaimsService>()
-                .AddProfileService<IdentityWithAdditionalClaimsProfileService>();
+                //.AddProfileService<IdentityWithAdditionalClaimsProfileService>();
 
             services.ConfigureApplicationCookie(options =>
             {
@@ -97,6 +98,10 @@ namespace IdentityServer
             });
 
             builder.AddAspNetIdentity<User>();
+
+            services.AddTransient<IProfileService, ProfileService>();
+            //services.AddTransient<IProfileService, CustomClaimsService>();
+            
 
             builder.AddDeveloperSigningCredential();//only dev
 

@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
@@ -31,9 +33,9 @@ namespace MVCClient
             services.AddAuthentication(options =>
             {
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = "oidc";
+                options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             })
-            .AddCookie(options => options.ExpireTimeSpan = TimeSpan.FromMinutes(60)) 
+            .AddCookie(options => options.ExpireTimeSpan = TimeSpan.FromMinutes(60))
             .AddOpenIdConnect(options =>
             {
                 options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -46,19 +48,33 @@ namespace MVCClient
 
                 options.Scope.Add("openid");
                 options.Scope.Add("profile");
+                options.Scope.Add("email");
                 options.Scope.Add("api_li_scope");
+                options.Scope.Add("role");
+
+                options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                {
+                    NameClaimType = "name",
+                    RoleClaimType = "role"
+                };
+                options.ClaimActions.MapJsonKey("role", "role", "role");
+
+                options.ClaimActions.MapJsonKey("preferred_username", "preferred_username");
+
                 options.GetClaimsFromUserInfoEndpoint = true;
+                
+
+                //options.ClaimActions.Add(new RoleClaimAction());
 
                 options.SaveTokens = true;
-
-                options.Events = new OpenIdConnectEvents
+                /*options.Events = new OpenIdConnectEvents
                 {
                     OnRedirectToIdentityProvider = context =>
                     {
                         context.ProtocolMessage.SetParameter("myparam", context.Request.Query["myparam=myvalue"]);
                         return Task.FromResult(0);
                     }
-                };
+                };*/
             });
 
         }

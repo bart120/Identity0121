@@ -4,7 +4,11 @@
     ViewData["Title"] = "View";
 }
 
-<h1>View</h1>
+@if (User.IsInRole("ADMIN"))
+{
+    <h1>View</h1>
+}
+
 
 <h4>LoginViewModel</h4>
 <hr />

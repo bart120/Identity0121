@@ -11,7 +11,7 @@ namespace IdentityServer.Services
     {
         public Task GetProfileDataAsync(ProfileDataRequestContext context)
         {
-            var myparam = context.Subject.Claims.FirstOrDefault(c => c.Type == "myparam");
+            //var myparam = context.Subject.Claims.FirstOrDefault(c => c.Type == "myparam");
 
             return Task.FromResult(0);
         }

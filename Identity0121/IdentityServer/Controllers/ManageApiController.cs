@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using IdentityModel;
 using IdentityServer.AspIdentity;
 using IdentityServer4;
 using IdentityServer4.EntityFramework.DbContexts;
@@ -16,11 +17,13 @@ namespace IdentityServer.Controllers
     {
         private readonly ConfigurationDbContext _confContext;
         private readonly UserManager<User> _userMgr;
+        private readonly RoleManager<IdentityRole> _roleMgr;
 
-        public ManageApiController(ConfigurationDbContext confContext, UserManager<User> userMgr)
+        public ManageApiController(ConfigurationDbContext confContext, UserManager<User> userMgr, RoleManager<IdentityRole> roleMgr)
         {
             _confContext = confContext;
             _userMgr = userMgr;
+            _roleMgr = roleMgr;
         }
 
         public async Task<IActionResult> AddApiResource()
@@ -106,5 +109,38 @@ namespace IdentityServer.Controllers
                 return Ok();
         }
 
-    }
+        public async Task<IActionResult> AddUserRole()
+        {
+            IdentityRole role = new IdentityRole();
+            role.Name = "ADMIN";
+
+            IdentityRole role2 = new IdentityRole();
+            role2.Name = "UTILISATEUR";
+
+            await _roleMgr.CreateAsync(role);
+            await _roleMgr.CreateAsync(role2);
+
+            var user = await _userMgr.FindByNameAsync("remi@google.fr");
+            await _userMgr.AddToRoleAsync(user, "ADMIN");
+            await _userMgr.AddToRoleAsync(user, "UTILISATEUR");
+
+            return Ok();
+        }
+
+        public async Task<IActionResult> AddRole()
+        {
+            var res = new IdentityResource
+            {
+                Name = "role",
+                DisplayName = "Roles",
+                UserClaims = { JwtClaimTypes.Role }
+            };
+
+            _confContext.IdentityResources.Add(res.ToEntity());
+            await _confContext.SaveChangesAsync();
+
+            return Ok();
+        }
+
+     }
 }

@@ -21,11 +21,16 @@ namespace MVCClient.Controllers
             _logger = logger;
         }
 
+        [Authorize(Roles ="ADMIN")]
         public async Task<IActionResult> Index()
         {
             var u = User;
             var accessToken = await HttpContext.GetTokenAsync("access_token");
             var idToken = await HttpContext.GetTokenAsync("id_token");
+
+            var role = User.FindAll(x => x.Type == "role");
+            
+            var test = User.FindFirst(x => x.Type == "preferred_username")?.Value;
 
             return View();
         }
