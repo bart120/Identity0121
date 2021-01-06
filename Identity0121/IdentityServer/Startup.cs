@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using IdentityServer.AspIdentity;
 using IdentityServer.Demo;
 using IdentityServer.Services;
+using IdentityServer4;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -84,7 +85,9 @@ namespace IdentityServer
                     s.DefaultSchema = "operational";
                     s.ConfigureDbContext = db => db.UseSqlServer(Configuration.GetConnectionString("IdentityConnection"),
                          sql => sql.MigrationsAssembly(migrationAssemblyName));
-                });
+                })
+                //.AddProfileService<CustomClaimsService>()
+                .AddProfileService<IdentityWithAdditionalClaimsProfileService>();
 
             services.ConfigureApplicationCookie(options =>
             {
@@ -97,7 +100,13 @@ namespace IdentityServer
 
             builder.AddDeveloperSigningCredential();//only dev
 
-            services.AddAuthentication();
+            services.AddAuthentication()
+                .AddMicrosoftAccount("microsoftaccount", options =>
+                {
+                    options.ClientId = "95c3325b-fce5-4fbe-afec-b43c8b8ee37f";
+                    options.ClientSecret = "J1AsVM~~7n3D9.PZ_eQ_1nw-65ndhCFk3.";
+                    options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+                });
 
             
 

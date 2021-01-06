@@ -8,6 +8,7 @@ using IdentityServer.Demo;
 using IdentityServer.Models;
 using IdentityServer4;
 using IdentityServer4.Test;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -32,9 +33,18 @@ namespace IdentityServer.Controllers
         [HttpGet]
         public IActionResult Login(string returnUrl)
         {
+            //AD authenticated
+            /*if (this.User.Identity.IsAuthenticated)
+            {
+                return Redirect(returnUrl);
+            }*/
+
+
             var model = new LoginViewModel { ReturnUrl = returnUrl };
             return View(model);
         }
+
+
 
         [Route("login")]
         [HttpPost]
@@ -49,6 +59,7 @@ namespace IdentityServer.Controllers
                     //var user = await _userMgr.FindByNameAsync(model.Email);
                     return Redirect(model.ReturnUrl);
                 }
+                
                 
                 /*if (_users.ValidateCredentials(model.Email, model.Password)) 
                 {
@@ -75,6 +86,33 @@ namespace IdentityServer.Controllers
             {
 
             }
+        }
+
+        [Route("exter", Name ="exter")]
+        [HttpGet]
+        public IActionResult Exter(string returnUrl)
+        {
+            var callback = Url.Action("SigninExter");
+            var props = new AuthenticationProperties
+            {
+                RedirectUri = "https://localhost:5001/Authentication/SigninExter",
+                Items =
+                {
+                    {"scheme" ,  IdentityServerConstants.ExternalCookieAuthenticationScheme},
+                    {"returnUrl", returnUrl }
+                }
+            };
+
+            return Challenge(props, "microsoftaccount");
+
+        }
+
+        //[Route("signin-microsoft", Name = "SigninExter")]
+        public async Task<IActionResult> SigninExter(string returnUrl)
+        {
+            var result = await HttpContext.AuthenticateAsync("microsoftaccount");
+            
+            return BadRequest();
         }
     }
 }

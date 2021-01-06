@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -45,9 +46,19 @@ namespace MVCClient
 
                 options.Scope.Add("openid");
                 options.Scope.Add("profile");
+                options.Scope.Add("api_li_scope");
                 options.GetClaimsFromUserInfoEndpoint = true;
 
                 options.SaveTokens = true;
+
+                options.Events = new OpenIdConnectEvents
+                {
+                    OnRedirectToIdentityProvider = context =>
+                    {
+                        context.ProtocolMessage.SetParameter("myparam", context.Request.Query["myparam=myvalue"]);
+                        return Task.FromResult(0);
+                    }
+                };
             });
 
         }
