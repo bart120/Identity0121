@@ -88,7 +88,20 @@ namespace IdentityServer.Controllers
             }
         }
 
-        [Route("exter", Name ="exter")]
+        [Route("logout")]
+        [HttpGet]
+        public async Task<IActionResult> Logout(string returnUrl)
+        {
+            if (User?.Identity.IsAuthenticated == true)
+            {
+                await _signInMgr.SignOutAsync();
+            }
+            if (!string.IsNullOrWhiteSpace(returnUrl))
+                return Redirect(returnUrl);
+            return Redirect("https://localhost:5801/signout-oidc");
+        }
+
+            [Route("exter", Name ="exter")]
         [HttpGet]
         public IActionResult Exter(string returnUrl)
         {

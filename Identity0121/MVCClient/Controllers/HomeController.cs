@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
+using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -21,7 +23,7 @@ namespace MVCClient.Controllers
             _logger = logger;
         }
 
-        [Authorize(Roles ="ADMIN")]
+        
         public async Task<IActionResult> Index()
         {
             var u = User;
@@ -35,8 +37,16 @@ namespace MVCClient.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        [Authorize(Roles = "ADMIN")]
+        public async Task<IActionResult> Privacy()
         {
+            var accessToken = await HttpContext.GetTokenAsync("access_token");
+            HttpClient client = new HttpClient();
+            client.SetBearerToken(accessToken);
+            client.BaseAddress = new Uri("https://localhost:5501/");
+            var result = await client.GetAsync("weatherforecast");
+            var code = result.StatusCode;
+
             return View();
         }
 
